@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bruno’s Derby Sweepstakes</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Meta tags SEO -->
+    <meta name="description" content="Simulação de corrida de cavalos com o Bruno. Escolha seu favorito e aposte alto!">
+</head>
+
+<body>
+    <header>
+        <div class="logo">BRUNO'S DERBY</div>
+        <div class="balance-container">
+            <span>Saldo:</span>
+            <span class="balance-amount" id="balance">$100.00</span>
+        </div>
+    </header>
+
+    <main>
+        <section class="betting-panel">
+            <div>
+                <h3 class="section-title">1. Escolha seu Competidor</h3>
+                <div class="horse-selection" id="horse-selector">
+                    <div class="horse-card" data-horse="1">
+                        <img src="horse_sprite.png" alt="Bruno Estrategista" class="horse-1">
+                        <span class="horse-name">Bruno Estrategista</span>
+                    </div>
+                    <div class="horse-card" data-horse="2">
+                        <img src="horse_sprite.png" alt="Bruno Focado" class="horse-2">
+                        <span class="horse-name">Bruno Focado</span>
+                    </div>
+                    <div class="horse-card" data-horse="3">
+                        <img src="horse_sprite.png" alt="Bruno OpenToWork" class="horse-3">
+                        <span class="horse-name">Bruno OpenToWork</span>
+                    </div>
+                    <div class="horse-card" data-horse="4">
+                        <img src="horse_sprite.png" alt="Bruno Networking" class="horse-4">
+                        <span class="horse-name">Bruno Networking</span>
+                    </div>
+                    <div class="horse-card" data-horse="5">
+                        <img src="horse_sprite.png" alt="Bruno Raiz" class="horse-5">
+                        <span class="horse-name">Bruno Raiz</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bet-controls">
+                <div class="input-group">
+                    <h3 class="section-title">2. Valor da Aposta</h3>
+                    <input type="number" id="bet-amount" placeholder="0.00" min="1">
+                </div>
+                <button class="start-btn" id="start-race" disabled>Iniciar Corrida</button>
+            </div>
+        </section>
+
+        <section class="track-container" id="track">
+            <div class="finish-line"></div>
+            <div class="track-lane">
+                <img src="horse_sprite.png" class="horse-sprite horse-1" id="sprite-1" alt="">
+            </div>
+            <div class="track-lane">
+                <img src="horse_sprite.png" class="horse-sprite horse-2" id="sprite-2" alt="">
+            </div>
+            <div class="track-lane">
+                <img src="horse_sprite.png" class="horse-sprite horse-3" id="sprite-3" alt="">
+            </div>
+            <div class="track-lane">
+                <img src="horse_sprite.png" class="horse-sprite horse-4" id="sprite-4" alt="">
+            </div>
+            <div class="track-lane">
+                <img src="horse_sprite.png" class="horse-sprite horse-5" id="sprite-5" alt="">
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="result-modal">
+        <div class="modal">
+            <h2 id="modal-title">Você Ganhou!</h2>
+            <p id="modal-message">Seu saldo foi atualizado.</p>
+            <button class="restart-btn" onclick="closeModal()">Nova Corrida</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
