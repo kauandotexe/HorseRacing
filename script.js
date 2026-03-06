@@ -34,34 +34,58 @@ betInput.addEventListener('input', checkBet);
 
 function checkBet() {
     betAmount = parseFloat(betInput.value);
-    placeBetBtn.disabled = !(selectedHorse && betAmount > 0 && betAmount <= balance);
+    if (isNaN(betAmount)) betAmount = 0;
+
+    // Validate if horse is selected and bet is within balance
+    const isValid = selectedHorse !== null && betAmount > 0 && betAmount <= balance;
+    placeBetBtn.disabled = !isValid;
 }
 
 placeBetBtn.addEventListener('click', () => {
+    if (placeBetBtn.disabled) return;
+
+    soundCash.currentTime = 0;
     soundCash.play();
+
     balance -= betAmount;
     updateUI();
 
+    // Swap buttons
     placeBetBtn.style.display = 'none';
     startRaceBtn.style.display = 'block';
+    startRaceBtn.disabled = false;
     betInput.disabled = true;
 });
 
 function startRace() {
+    if (isRacing) return;
+
     isRacing = true;
     startRaceBtn.disabled = true;
+    soundRace.currentTime = 0;
     soundRace.play();
 
-    const finishX = document.querySelector('.stadium').clientWidth - 100;
+    const trackWidth = document.querySelector('.track-container').clientWidth;
+    const finishX = trackWidth - 120; // Correct alignment for finish
     const pos = [20, 20, 20, 20, 20];
-    sprites.forEach(s => s.classList.add('running'));
+
+    sprites.forEach(s => {
+        s.style.left = '20px';
+        s.classList.add('running');
+    });
 
     function frame() {
         let winner = null;
         for (let i = 0; i < 5; i++) {
-            pos[i] += (Math.random() * 4) + (Math.random() > 0.99 ? 15 : 0);
+            // Speed calculation
+            const speed = (Math.random() * 4) + (Math.random() > 0.98 ? 18 : 0);
+            pos[i] += speed;
             sprites[i].style.left = pos[i] + 'px';
-            if (pos[i] >= finishX) { winner = i + 1; break; }
+
+            if (pos[i] >= finishX) {
+                winner = i + 1;
+                break;
+            }
         }
 
         if (winner) {
@@ -78,18 +102,21 @@ function startRace() {
 
 function renderResult(winner) {
     const won = selectedHorse === winner;
-    const name = document.querySelector(`.horse-item[data-horse="${winner}"] .name`).innerText;
+    const item = document.querySelector(`.horse-item[data-horse="${winner}"]`);
+    const name = item ? item.querySelector('.name').innerText : "Vencedor";
 
-    document.getElementById('modal-title').innerText = won ? "VITÓRIA!" : "DERROTA!";
-    document.getElementById('modal-title').className = won ? "win" : "lose";
+    const title = document.getElementById('modal-title');
+    title.innerText = won ? "VITÓRIA! 🏆" : "DERROTA! ❌";
+    title.className = won ? "win" : "lose";
 
     if (won) {
         const prize = betAmount * 2;
         balance += prize;
+        soundWin.currentTime = 0;
         soundWin.play();
-        document.getElementById('modal-message').innerText = `O ${name} venceu! Você ganhou $${prize.toFixed(2)}.`;
+        document.getElementById('modal-message').innerText = `O ${name} cruzou primeiro! Você faturou +$${prize.toFixed(2)}.`;
     } else {
-        document.getElementById('modal-message').innerText = `O vencedor foi o ${name}. Mais sorte na próxima!`;
+        document.getElementById('modal-message').innerText = `O ${name} foi o campeão. Dessa vez não deu!`;
     }
 
     updateUI();
@@ -110,4 +137,8 @@ function closeModal() {
 }
 
 startRaceBtn.addEventListener('click', startRace);
+
+// Export to window for global access if needed
+window.closeModal = closeModal;
+
 updateUI();

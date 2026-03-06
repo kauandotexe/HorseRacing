@@ -4,56 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DERBY PRO</title>
+    <title>DERBY PRO 🐎</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <aside>
         <div class="balance-card">
-            <h4>Seu Saldo</h4>
+            <h4>SALDO</h4>
             <span id="balance">$100.00</span>
         </div>
 
-        <div class="section">
-            <span class="section-title">1. Selecione o Corredor</span>
-            <div class="horse-list" id="horse-selector">
-                <div class="horse-item" data-horse="1">
-                    <img src="horse_sprite.png" class="h-1" alt="">
-                    <div class="info"><span class="name">Pé de Pano</span><span class="odds">2.0x</span></div>
-                </div>
-                <div class="horse-item" data-horse="2">
-                    <img src="horse_sprite.png" class="h-2" alt="">
-                    <div class="info"><span class="name">Ma-Horse</span><span class="odds">2.0x</span></div>
-                </div>
-                <div class="horse-item" data-horse="3">
-                    <img src="horse_sprite.png" class="h-3" alt="">
-                    <div class="info"><span class="name">U-Horse-ain</span><span class="odds">2.0x</span></div>
-                </div>
-                <div class="horse-item" data-horse="4">
-                    <img src="horse_sprite.png" class="h-4" alt="">
-                    <div class="info"><span class="name">Trota-Mundos</span><span class="odds">2.0x</span></div>
-                </div>
-                <div class="horse-item" data-horse="5">
-                    <img src="horse_sprite.png" class="h-5" alt="">
-                    <div class="info"><span class="name">Galope de Ouro</span><span class="odds">2.0x</span></div>
-                </div>
+        <span class="section-title">1. Escolha o Corredor</span>
+        <div class="horse-list" id="horse-selector">
+            <div class="horse-item" data-horse="1">
+                <img src="horse_sprite.png" class="h-1">
+                <div class="info"><span class="name">Pé de Pano</span><span class="odds">2.0x</span></div>
+            </div>
+            <div class="horse-item" data-horse="2">
+                <img src="horse_sprite.png" class="h-2">
+                <div class="info"><span class="name">Ma-Horse</span><span class="odds">2.0x</span></div>
+            </div>
+            <div class="horse-item" data-horse="3">
+                <img src="horse_sprite.png" class="h-3">
+                <div class="info"><span class="name">U-Horse-ain</span><span class="odds">2.0x</span></div>
+            </div>
+            <div class="horse-item" data-horse="4">
+                <img src="horse_sprite.png" class="h-4">
+                <div class="info"><span class="name">Trota-Mundos</span><span class="odds">2.0x</span></div>
+            </div>
+            <div class="horse-item" data-horse="5">
+                <img src="horse_sprite.png" class="h-5">
+                <div class="info"><span class="name">Galope de Ouro</span><span class="odds">2.0x</span></div>
             </div>
         </div>
 
-        <div class="section">
-            <span class="section-title">2. Valor</span>
-            <input type="number" id="bet-amount" placeholder="Quantia">
-        </div>
+        <span class="section-title">2. Aposta ($)</span>
+        <input type="number" id="bet-amount" placeholder="Quanto?">
 
-        <button id="place-bet" class="bet-btn" disabled>Confirmar Aposta</button>
-        <button id="start-race" class="start-btn" style="display: none;">Iniciar Corrida!</button>
+        <button id="place-bet" class="btn bet-btn" disabled>Confirmar Aposta</button>
+        <button id="start-race" class="btn start-btn" style="display: none;">Dar a Largada!</button>
     </aside>
 
     <main>
         <h1>CORRIDA DE CAVALOS</h1>
-        <div class="stadium">
-            <div class="finish"></div>
+        <div class="track-container">
+            <div class="finish-line"></div>
             <div class="lane"><img src="horse_sprite.png" class="sprite h-1" id="sprite-1"></div>
             <div class="lane"><img src="horse_sprite.png" class="sprite h-2" id="sprite-2"></div>
             <div class="lane"><img src="horse_sprite.png" class="sprite h-3" id="sprite-3"></div>
@@ -66,11 +62,11 @@
     <audio id="sound-race" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" loop></audio>
     <audio id="sound-win" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
-    <div class="overlay" id="result-overlay">
-        <div class="modal">
+    <div class="modal-overlay" id="result-overlay">
+        <div class="modal-content">
             <h2 id="modal-title">VITÓRIA!</h2>
             <p id="modal-message"></p>
-            <button class="bet-btn" onclick="closeModal()">Recomeçar</button>
+            <button class="btn bet-btn" onclick="closeModal()">Nova Rodada</button>
         </div>
     </div>
 
