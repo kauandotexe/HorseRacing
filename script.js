@@ -54,13 +54,15 @@ function validateBet() {
         !isRacing;
 
     startBtn.disabled = !isValid;
+    startBtn.style.opacity = !isValid ? "0.3" : "1";
 }
 
 // Race Logic
-const finishLineX = document.querySelector('.track-container').clientWidth - 120; // 50px line + 70px horse width
-
 function startRace() {
     if (isRacing) return;
+
+    const trackWidth = document.querySelector('.track-area').clientWidth;
+    const finishLineX = trackWidth - 100; // Finish line position minus horse width
 
     // Play Cash Sound
     soundCash.currentTime = 0;
@@ -73,6 +75,7 @@ function startRace() {
 
     // Play Race Music
     soundRace.currentTime = 0;
+    soundRace.volume = 0.5;
     soundRace.play().catch(e => console.log("Audio play failed:", e));
 
     // Reset positions
@@ -86,10 +89,12 @@ function startRace() {
         let winner = null;
 
         for (let i = 0; i < 5; i++) {
-            // Random Walk step + Random "Nitro" boost
-            const nitro = Math.random() > 0.98 ? 20 : 0;
-            const step = (Math.random() * 4.5) + (nitro * Math.random());
-            positions[i] += step;
+            // Unpredictable movement with random bursts
+            const nitro = Math.random() > 0.985 ? 18 : 0;
+            const jitter = (Math.random() - 0.5) * 2;
+            const step = (Math.random() * 4) + (nitro * Math.random()) + jitter;
+
+            positions[i] = Math.max(0, positions[i] + step);
             sprites[i].style.left = `${positions[i]}px`;
 
             if (positions[i] >= finishLineX) {
@@ -130,33 +135,31 @@ function endRace(winner) {
 
         modalTitle.innerText = "🏆 VITÓRIA!";
         modalTitle.className = "win-text";
-        modalMessage.innerText = `O ${horseName} deu o sangue e foi o grande campeão! Você faturou +$${prize.toFixed(2)}.`;
+        modalMessage.innerText = `O ${horseName} foi imbatível! Você faturou +$${prize.toFixed(2)}.`;
     } else {
         modalTitle.innerText = "QUASE LÁ!";
         modalTitle.className = "lose-text";
-        modalMessage.innerText = `Dessa vez o ${horseName} foi mais rápido. Sorte na próxima!`;
+        modalMessage.innerText = `O vencedor foi o ${horseName}. Sua sorte virá na próxima!`;
     }
 
     updateBalance();
     setTimeout(() => {
         modal.style.display = 'flex';
-        modal.firstElementChild.classList.add('active');
-    }, 500);
+    }, 800);
 }
 
 function closeModal() {
     modal.style.display = 'none';
-    modal.firstElementChild.classList.remove('active');
 
-    // Reset UI
-    betInput.value = '';
+    // Reset positions
+    sprites.forEach(s => s.style.left = '0px');
     selectedHorse = null;
     horseCards.forEach(c => c.classList.remove('selected'));
-    sprites.forEach(s => s.style.left = '0px');
+    betInput.value = '';
     validateBet();
 }
 
 startBtn.addEventListener('click', startRace);
 
-// Export for console debugging
-window.game = { balance, startRace, closeModal };
+// Initialize UI
+updateBalance();
