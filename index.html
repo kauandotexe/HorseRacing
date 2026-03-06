@@ -25,24 +25,24 @@
                 <h3 class="section-title">1. Escolha seu Competidor</h3>
                 <div class="horse-selection" id="horse-selector">
                     <div class="horse-card" data-horse="1">
-                        <img src="horse_sprite.png" alt="Bruno Original" class="horse-1">
-                        <span class="horse-name">Bruno Original</span>
+                        <img src="horse_sprite.png" alt="Pé de Pano" class="horse-1">
+                        <span class="horse-name">Pé de Pano</span>
                     </div>
                     <div class="horse-card" data-horse="2">
-                        <img src="horse_sprite.png" alt="Bruno Escarlate" class="horse-2">
-                        <span class="horse-name">Bruno Escarlate</span>
+                        <img src="horse_sprite.png" alt="Relâmpago Ma-Horse" class="horse-2">
+                        <span class="horse-name">Ma-Horse</span>
                     </div>
                     <div class="horse-card" data-horse="3">
-                        <img src="horse_sprite.png" alt="Bruno Esmeralda" class="horse-3">
-                        <span class="horse-name">Bruno Esmeralda</span>
+                        <img src="horse_sprite.png" alt="U-Horse-ain Bolt" class="horse-3">
+                        <span class="horse-name">U-Horse-ain</span>
                     </div>
                     <div class="horse-card" data-horse="4">
-                        <img src="horse_sprite.png" alt="Bruno Safira" class="horse-4">
-                        <span class="horse-name">Bruno Safira</span>
+                        <img src="horse_sprite.png" alt="Trota-Mundos" class="horse-4">
+                        <span class="horse-name">Trota-Mundos</span>
                     </div>
                     <div class="horse-card" data-horse="5">
-                        <img src="horse_sprite.png" alt="Bruno Monocromático" class="horse-5">
-                        <span class="horse-name">Bruno Mono</span>
+                        <img src="horse_sprite.png" alt="Galope de Ouro" class="horse-5">
+                        <span class="horse-name">Galope de Ouro</span>
                     </div>
                 </div>
             </div>
@@ -52,11 +52,12 @@
                     <h3 class="section-title">2. Valor da Aposta</h3>
                     <input type="number" id="bet-amount" placeholder="0.00" min="1">
                 </div>
-                <button class="start-btn" id="start-race" disabled>Iniciar Corrida</button>
+                <button class="start-btn" id="start-race" disabled>Dar a Partida!</button>
             </div>
         </section>
 
         <section class="track-container" id="track">
+            <div class="track-overlay"></div>
             <div class="finish-line"></div>
             <div class="track-lane">
                 <img src="horse_sprite.png" class="horse-sprite horse-1" id="sprite-1" alt="">
@@ -75,6 +76,11 @@
             </div>
         </section>
     </main>
+
+    <!-- Audio Effects -->
+    <audio id="sound-cash" src="https://assets.mixkit.co/active_storage/sfx/2012/2012-preview.mp3"></audio>
+    <audio id="sound-race" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" loop></audio>
+    <audio id="sound-win" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
     <div class="modal-overlay" id="result-modal">
         <div class="modal">

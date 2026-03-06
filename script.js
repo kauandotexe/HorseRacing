@@ -21,6 +21,11 @@ const modal = document.getElementById('result-modal');
 const modalTitle = document.getElementById('modal-title');
 const modalMessage = document.getElementById('modal-message');
 
+// Audio Elements
+const soundCash = document.getElementById('sound-cash');
+const soundRace = document.getElementById('sound-race');
+const soundWin = document.getElementById('sound-win');
+
 // Initialize
 function updateBalance() {
     balanceDisplay.innerText = `$${balance.toFixed(2)}`;
@@ -57,10 +62,18 @@ const finishLineX = document.querySelector('.track-container').clientWidth - 120
 function startRace() {
     if (isRacing) return;
 
+    // Play Cash Sound
+    soundCash.currentTime = 0;
+    soundCash.play().catch(e => console.log("Audio play failed:", e));
+
     isRacing = true;
     startBtn.disabled = true;
     balance -= betAmount;
     updateBalance();
+
+    // Play Race Music
+    soundRace.currentTime = 0;
+    soundRace.play().catch(e => console.log("Audio play failed:", e));
 
     // Reset positions
     const positions = [0, 0, 0, 0, 0];
@@ -74,7 +87,7 @@ function startRace() {
 
         for (let i = 0; i < 5; i++) {
             // Random Walk step + Random "Nitro" boost
-            const nitro = Math.random() > 0.95 ? 15 : 0; // Rare 15px jump
+            const nitro = Math.random() > 0.98 ? 20 : 0;
             const step = (Math.random() * 4.5) + (nitro * Math.random());
             positions[i] += step;
             sprites[i].style.left = `${positions[i]}px`;
@@ -99,6 +112,9 @@ function endRace(winner) {
     isRacing = false;
     cancelAnimationFrame(raceAnimationId);
 
+    // Stop Race Music
+    soundRace.pause();
+
     sprites.forEach(s => s.classList.remove('running'));
 
     const won = selectedHorse === winner;
@@ -107,13 +123,18 @@ function endRace(winner) {
     if (won) {
         const prize = betAmount * 2;
         balance += prize;
-        modalTitle.innerText = "VITÓRIA DO BRUNO!";
+
+        // Play Win Sound
+        soundWin.currentTime = 0;
+        soundWin.play().catch(e => console.log("Audio play failed:", e));
+
+        modalTitle.innerText = "🏆 VITÓRIA!";
         modalTitle.className = "win-text";
-        modalMessage.innerText = `O ${horseName} deu o sangue e foi o grande campeão! Você agora tem +$${prize.toFixed(2)} na conta.`;
+        modalMessage.innerText = `O ${horseName} deu o sangue e foi o grande campeão! Você faturou +$${prize.toFixed(2)}.`;
     } else {
-        modalTitle.innerText = "QUASE LÁ, CAMPEÃO!";
+        modalTitle.innerText = "QUASE LÁ!";
         modalTitle.className = "lose-text";
-        modalMessage.innerText = `Dessa vez o ${horseName} foi mais rápido. O importante é o networking!`;
+        modalMessage.innerText = `Dessa vez o ${horseName} foi mais rápido. Sorte na próxima!`;
     }
 
     updateBalance();
