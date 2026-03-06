@@ -1,13 +1,13 @@
-// Game State
+// Estado do Jogo
 let balance = 100.00;
 let selectedHorse = null;
 let betAmount = 0;
 let isRacing = false;
 let raceAnimationId = null;
 
-// DOM Elements
+// Elementos da UI
 const balanceDisplay = document.getElementById('balance');
-const horseCards = document.querySelectorAll('.horse-card');
+const horseButtons = document.querySelectorAll('.horse-btn');
 const betInput = document.getElementById('bet-amount');
 const startBtn = document.getElementById('start-race');
 const sprites = [
@@ -18,32 +18,30 @@ const sprites = [
     document.getElementById('sprite-5')
 ];
 const modal = document.getElementById('result-modal');
+const modalCard = document.getElementById('modal-card');
 const modalTitle = document.getElementById('modal-title');
 const modalMessage = document.getElementById('modal-message');
 
-// Audio Elements
+// Áudios
 const soundCash = document.getElementById('sound-cash');
 const soundRace = document.getElementById('sound-race');
 const soundWin = document.getElementById('sound-win');
 
-// Initialize
 function updateBalance() {
     balanceDisplay.innerText = `$${balance.toFixed(2)}`;
 }
 
-// Horse Selection
-horseCards.forEach(card => {
-    card.addEventListener('click', () => {
+// Seleção do Corredor
+horseButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
         if (isRacing) return;
-
-        horseCards.forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
-        selectedHorse = parseInt(card.dataset.horse);
+        horseButtons.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedHorse = parseInt(btn.dataset.horse);
         validateBet();
     });
 });
 
-// Bet Validation
 betInput.addEventListener('input', validateBet);
 
 function validateBet() {
@@ -52,36 +50,33 @@ function validateBet() {
         betAmount > 0 &&
         betAmount <= balance &&
         !isRacing;
-
     startBtn.disabled = !isValid;
-    startBtn.style.opacity = !isValid ? "0.3" : "1";
 }
 
-// Race Logic
 function startRace() {
     if (isRacing) return;
 
-    const trackWidth = document.querySelector('.track-area').clientWidth;
-    const finishLineX = trackWidth - 100; // Finish line position minus horse width
+    // Dimensões da pista (calculadas no momento para evitar erro de proporção)
+    const trackWidth = document.querySelector('.track-stadium').clientWidth;
+    const finishLineX = trackWidth - 160; // Compensação da linha de chegada e largura do sprite
 
-    // Play Cash Sound
+    // Sons de Início
     soundCash.currentTime = 0;
-    soundCash.play().catch(e => console.log("Audio play failed:", e));
+    soundCash.play().catch(e => console.log("Erro áudio:", e));
 
     isRacing = true;
     startBtn.disabled = true;
     balance -= betAmount;
     updateBalance();
 
-    // Play Race Music
+    // Música Tema
     soundRace.currentTime = 0;
-    soundRace.volume = 0.5;
-    soundRace.play().catch(e => console.log("Audio play failed:", e));
+    soundRace.volume = 0.4;
+    soundRace.play().catch(e => console.log("Erro áudio:", e));
 
-    // Reset positions
-    const positions = [0, 0, 0, 0, 0];
+    const positions = [40, 40, 40, 40, 40]; // Posição inicial (offset da esquerda)
     sprites.forEach(s => {
-        s.style.left = '0px';
+        s.style.left = '40px';
         s.classList.add('running');
     });
 
@@ -89,12 +84,12 @@ function startRace() {
         let winner = null;
 
         for (let i = 0; i < 5; i++) {
-            // Unpredictable movement with random bursts
-            const nitro = Math.random() > 0.985 ? 18 : 0;
-            const jitter = (Math.random() - 0.5) * 2;
-            const step = (Math.random() * 4) + (nitro * Math.random()) + jitter;
+            // Algoritmo de Movimento Dinâmico
+            const nitro = Math.random() > 0.988 ? 22 : 0;
+            const jitter = (Math.random() - 0.4) * 2;
+            const step = (Math.random() * 4.2) + (nitro * Math.random()) + jitter;
 
-            positions[i] = Math.max(0, positions[i] + step);
+            positions[i] = Math.max(40, positions[i] + step);
             sprites[i].style.left = `${positions[i]}px`;
 
             if (positions[i] >= finishLineX) {
@@ -116,50 +111,47 @@ function startRace() {
 function endRace(winner) {
     isRacing = false;
     cancelAnimationFrame(raceAnimationId);
-
-    // Stop Race Music
     soundRace.pause();
-
     sprites.forEach(s => s.classList.remove('running'));
 
     const won = selectedHorse === winner;
-    const horseName = document.querySelector(`.horse-card[data-horse="${winner}"] .horse-name`).innerText;
+    const horseName = document.querySelector(`.horse-btn[data-horse="${winner}"] .h-name`).innerText;
+
+    modalCard.classList.remove('win', 'lose');
 
     if (won) {
         const prize = betAmount * 2;
         balance += prize;
-
-        // Play Win Sound
         soundWin.currentTime = 0;
-        soundWin.play().catch(e => console.log("Audio play failed:", e));
+        soundWin.play().catch(e => console.log("Erro áudio:", e));
 
         modalTitle.innerText = "🏆 VITÓRIA!";
-        modalTitle.className = "win-text";
-        modalMessage.innerText = `O ${horseName} foi imbatível! Você faturou +$${prize.toFixed(2)}.`;
+        modalCard.classList.add('win');
+        modalMessage.innerText = `O ${horseName} deu o sangue e venceu! Você acaba de faturar +$${prize.toFixed(2)}.`;
     } else {
-        modalTitle.innerText = "QUASE LÁ!";
-        modalTitle.className = "lose-text";
-        modalMessage.innerText = `O vencedor foi o ${horseName}. Sua sorte virá na próxima!`;
+        modalTitle.innerText = "❌ DERROTA!";
+        modalCard.classList.add('lose');
+        modalMessage.innerText = `Dessa vez o ${horseName} foi mais rápido. Não desista do pódio!`;
     }
 
     updateBalance();
     setTimeout(() => {
         modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
     }, 800);
 }
 
 function closeModal() {
-    modal.style.display = 'none';
-
-    // Reset positions
-    sprites.forEach(s => s.style.left = '0px');
-    selectedHorse = null;
-    horseCards.forEach(c => c.classList.remove('selected'));
-    betInput.value = '';
-    validateBet();
+    modal.classList.remove('active');
+    setTimeout(() => {
+        modal.style.display = 'none';
+        sprites.forEach(s => s.style.left = '40px');
+        selectedHorse = null;
+        horseButtons.forEach(b => b.classList.remove('selected'));
+        betInput.value = '';
+        validateBet();
+    }, 300);
 }
 
 startBtn.addEventListener('click', startRace);
-
-// Initialize UI
 updateBalance();

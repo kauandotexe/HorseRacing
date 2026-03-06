@@ -4,104 +4,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORRIDA DE CAVALOS | Pro Racing Simulator</title>
+    <title>DERBY PRO | Simulador de Elite</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <aside>
-        <div class="sidebar-header">
-            <div class="balance-box">
-                <div class="balance-label">Seu Saldo</div>
-                <div class="balance-amount" id="balance">$100.00</div>
-            </div>
+        <div class="balance-card">
+            <div class="balance-label">Créditos Atuais</div>
+            <div class="balance-amount" id="balance">$100.00</div>
         </div>
 
-        <div class="betting-section">
-            <div class="selection-group">
-                <h3 class="section-title">Escolha seu Campeão</h3>
-                <div class="horse-grid" id="horse-selector">
-                    <div class="horse-card" data-horse="1">
-                        <img src="horse_sprite.png" alt="Pé de Pano" class="h-1">
-                        <div class="horse-info">
-                            <span class="horse-name">Pé de Pano</span>
-                            <span class="horse-odds">ODDS: 2.0x</span>
+        <div class="betting-controls">
+            <div>
+                <span class="section-label">1. Escolha seu Corredor</span>
+                <div class="horse-list" id="horse-selector">
+                    <div class="horse-btn" data-horse="1">
+                        <img src="horse_sprite.png" alt="Pé de Pano" class="horse-1">
+                        <div class="horse-details">
+                            <span class="h-name">Pé de Pano</span>
+                            <span class="h-odds">Retorno 2.0x</span>
                         </div>
                     </div>
-                    <div class="horse-card" data-horse="2">
-                        <img src="horse_sprite.png" alt="Relâmpago Ma-Horse" class="h-2">
-                        <div class="horse-info">
-                            <span class="horse-name">Ma-Horse</span>
-                            <span class="horse-odds">ODDS: 2.0x</span>
+                    <div class="horse-btn" data-horse="2">
+                        <img src="horse_sprite.png" alt="Ma-Horse" class="horse-2">
+                        <div class="horse-details">
+                            <span class="h-name">Ma-Horse</span>
+                            <span class="h-odds">Retorno 2.0x</span>
                         </div>
                     </div>
-                    <div class="horse-card" data-horse="3">
-                        <img src="horse_sprite.png" alt="U-Horse-ain Bolt" class="h-3">
-                        <div class="horse-info">
-                            <span class="horse-name">U-Horse-ain</span>
-                            <span class="horse-odds">ODDS: 2.0x</span>
+                    <div class="horse-btn" data-horse="3">
+                        <img src="horse_sprite.png" alt="U-Horse-ain" class="horse-3">
+                        <div class="horse-details">
+                            <span class="h-name">U-Horse-ain</span>
+                            <span class="h-odds">Retorno 2.0x</span>
                         </div>
                     </div>
-                    <div class="horse-card" data-horse="4">
-                        <img src="horse_sprite.png" alt="Trota-Mundos" class="h-4">
-                        <div class="horse-info">
-                            <span class="horse-name">Trota-Mundos</span>
-                            <span class="horse-odds">ODDS: 2.0x</span>
+                    <div class="horse-btn" data-horse="4">
+                        <img src="horse_sprite.png" alt="Trota-Mundos" class="horse-4">
+                        <div class="horse-details">
+                            <span class="h-name">Trota-Mundos</span>
+                            <span class="h-odds">Retorno 2.0x</span>
                         </div>
                     </div>
-                    <div class="horse-card" data-horse="5">
-                        <img src="horse_sprite.png" alt="Galope de Ouro" class="h-5">
-                        <div class="horse-info">
-                            <span class="horse-name">Galope de Ouro</span>
-                            <span class="horse-odds">ODDS: 2.0x</span>
+                    <div class="horse-btn" data-horse="5">
+                        <img src="horse_sprite.png" alt="Galope de Ouro" class="horse-5">
+                        <div class="horse-details">
+                            <span class="h-name">Galope de Ouro</span>
+                            <span class="h-odds">Retorno 2.0x</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="input-container">
-                <h3 class="section-title">Valor da Aposta</h3>
-                <input type="number" id="bet-amount" placeholder="Quanto vai apostar?" min="1">
+            <div style="margin-top: 1rem;">
+                <span class="section-label">2. Valor da Aposta</span>
+                <input type="number" id="bet-amount" class="bet-input-field" placeholder="Ex: 50.00" min="1">
             </div>
 
-            <button class="start-btn" id="start-race" disabled>Dar a Partida!</button>
+            <button class="play-button" id="start-race" disabled>Dar a Partida!</button>
         </div>
     </aside>
 
     <main>
-        <h1>CORRIDA DE CAVALOS</h1>
+        <header>
+            <h1>CORRIDA DE CAVALOS</h1>
+        </header>
 
-        <div class="track-area">
-            <div class="finish-line"></div>
+        <div class="track-stadium">
+            <div class="goal-post"></div>
 
-            <div class="track-lane">
-                <img src="horse_sprite.png" class="horse-sprite h-1" id="sprite-1" alt="">
+            <div class="lane">
+                <img src="horse_sprite.png" class="sprite horse-1" id="sprite-1" alt="">
             </div>
-            <div class="track-lane">
-                <img src="horse_sprite.png" class="horse-sprite h-2" id="sprite-2" alt="">
+            <div class="lane">
+                <img src="horse_sprite.png" class="sprite horse-2" id="sprite-2" alt="">
             </div>
-            <div class="track-lane">
-                <img src="horse_sprite.png" class="horse-sprite h-3" id="sprite-3" alt="">
+            <div class="lane">
+                <img src="horse_sprite.png" class="sprite horse-3" id="sprite-3" alt="">
             </div>
-            <div class="track-lane">
-                <img src="horse_sprite.png" class="horse-sprite h-4" id="sprite-4" alt="">
+            <div class="lane">
+                <img src="horse_sprite.png" class="sprite horse-4" id="sprite-4" alt="">
             </div>
-            <div class="track-lane">
-                <img src="horse_sprite.png" class="horse-sprite h-5" id="sprite-5" alt="">
+            <div class="lane">
+                <img src="horse_sprite.png" class="sprite horse-5" id="sprite-5" alt="">
             </div>
         </div>
     </main>
 
-    <!-- Audio Effects -->
+    <!-- Som Master -->
     <audio id="sound-cash" src="https://assets.mixkit.co/active_storage/sfx/2012/2012-preview.mp3"></audio>
     <audio id="sound-race" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" loop></audio>
     <audio id="sound-win" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
-    <div class="modal-overlay" id="result-modal">
-        <div class="modal">
-            <h2 id="modal-title">VITÓRIA!</h2>
-            <p id="modal-message">Seu saldo foi atualizado.</p>
-            <button class="restart-btn" onclick="closeModal()">NOVA CORRIDA</button>
+    <div class="overlay" id="result-modal">
+        <div class="result-card" id="modal-card">
+            <h2 id="modal-title" class="modal-title">VITÓRIA!</h2>
+            <p id="modal-message" class="modal-msg">Você acaba de faturar uma bolada!</p>
+            <button class="reset-btn" onclick="closeModal()">NOVA CORRIDA</button>
         </div>
     </div>
 
