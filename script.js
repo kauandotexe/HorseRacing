@@ -4,168 +4,148 @@ let betAmount = 0;
 let isRacing = false;
 let raceAnimationId = null;
 
-const balanceDisplay = document.getElementById('balance');
-const horseItems = document.querySelectorAll('.horse-item');
-const betInput = document.getElementById('bet-amount');
-const placeBetBtn = document.getElementById('place-bet');
-const startRaceBtn = document.getElementById('start-race');
-const sprites = [1, 2, 3, 4, 5].map(i => document.getElementById(`sprite-${i}`));
-const overlay = document.getElementById('result-overlay');
-
+// Audio
 const soundCash = document.getElementById('sound-cash');
 const soundRace = document.getElementById('sound-race');
 const soundWin = document.getElementById('sound-win');
 
 function updateUI() {
-    balanceDisplay.innerText = `$${balance.toFixed(2)}`;
-    checkBet(); // Re-valida o botão sempre que o saldo ou estado muda
+    document.getElementById('balance').innerText = `$${balance.toFixed(2)}`;
+
+    const placeBetBtn = document.getElementById('place-bet');
+    const startRaceBtn = document.getElementById('start-race');
+    const betInput = document.getElementById('bet-amount');
+
+    const amount = parseFloat(betInput.value);
+    const valid = selectedHorse !== null && !isNaN(amount) && amount > 0 && amount <= balance && !isRacing && startRaceBtn.style.display !== 'block';
+
+    placeBetBtn.disabled = !valid;
 }
 
-// Seleção de Cavalo
-horseItems.forEach(item => {
+// Horse Selection
+document.querySelectorAll('.horse-item').forEach(item => {
     item.addEventListener('click', () => {
-        if (isRacing || startRaceBtn.style.display === 'block') return;
+        if (isRacing || document.getElementById('start-race').style.display === 'block') return;
 
-        console.log("Cavalo selecionado:", item.dataset.horse);
-        horseItems.forEach(i => i.classList.remove('selected'));
+        document.querySelectorAll('.horse-item').forEach(i => i.classList.remove('selected'));
         item.classList.add('selected');
         selectedHorse = parseInt(item.dataset.horse);
-        checkBet();
+        updateUI();
     });
 });
 
-betInput.addEventListener('input', checkBet);
+document.getElementById('bet-amount').addEventListener('input', updateUI);
 
-function checkBet() {
-    const amount = parseFloat(betInput.value);
-    betAmount = isNaN(amount) ? 0 : amount;
+// PLACE BET
+document.getElementById('place-bet').addEventListener('click', () => {
+    const betInput = document.getElementById('bet-amount');
+    betAmount = parseFloat(betInput.value);
 
-    const isValid = selectedHorse !== null &&
-        betAmount > 0 &&
-        betAmount <= balance &&
-        !isRacing &&
-        startRaceBtn.style.display !== 'block';
+    if (selectedHorse && betAmount > 0 && betAmount <= balance) {
+        soundCash.currentTime = 0;
+        soundCash.play().catch(() => { });
 
-    placeBetBtn.disabled = !isValid;
-}
+        balance -= betAmount;
+        updateUI();
 
-// Botar a Aposta
-placeBetBtn.addEventListener('click', () => {
-    if (placeBetBtn.disabled) return;
-
-    console.log("Aposta confirmada:", betAmount);
-    soundCash.currentTime = 0;
-    soundCash.play().catch(e => console.log(e));
-
-    balance -= betAmount;
-    updateUI();
-
-    placeBetBtn.style.display = 'none';
-    startRaceBtn.style.display = 'block';
-    startRaceBtn.disabled = false;
-    betInput.disabled = true;
+        document.getElementById('place-bet').style.display = 'none';
+        document.getElementById('start-race').style.display = 'block';
+        betInput.disabled = true;
+    }
 });
 
-// Iniciar Corrida
-function startRace() {
+// START RACE
+document.getElementById('start-race').addEventListener('click', () => {
     if (isRacing) return;
 
-    console.log("Corrida iniciada!");
     isRacing = true;
-    startRaceBtn.disabled = true;
+    document.getElementById('start-race').disabled = true;
 
     soundRace.currentTime = 0;
-    soundRace.play().catch(e => console.log(e));
+    soundRace.play().catch(() => { });
 
     const trackWidth = document.querySelector('.track-area').clientWidth;
-    const finishX = trackWidth - 140; // Ajuste para a linha de chegada
-    const pos = [20, 20, 20, 20, 20];
+    const finishX = trackWidth - 100;
+
+    const sprites = [1, 2, 3, 4, 5].map(i => document.getElementById(`sprite-${i}`));
+    const positions = [20, 20, 20, 20, 20];
 
     sprites.forEach(s => {
         s.style.left = '20px';
         s.classList.add('running');
     });
 
-    function frame() {
-        let winner = null;
+    function move() {
+        let winnerIndex = -1;
         for (let i = 0; i < 5; i++) {
-            const burst = Math.random() > 0.985 ? 18 : 0;
-            const speed = (Math.random() * 4) + burst;
-            pos[i] += speed;
-            sprites[i].style.left = pos[i] + 'px';
+            const speed = (Math.random() * 3) + (Math.random() > 0.98 ? 15 : 0);
+            positions[i] += speed;
+            sprites[i].style.left = positions[i] + 'px';
 
-            if (pos[i] >= finishX) {
-                winner = i + 1;
+            if (positions[i] >= finishX) {
+                winnerIndex = i + 1;
                 break;
             }
         }
 
-        if (winner) {
+        if (winnerIndex !== -1) {
             isRacing = false;
             soundRace.pause();
             sprites.forEach(s => s.classList.remove('running'));
-            renderResult(winner);
+
+            const won = selectedHorse === winnerIndex;
+            const horseName = document.querySelector(`.horse-item[data-horse="${winnerIndex}"] .name`).innerText;
+
+            const modal = document.getElementById('result-overlay');
+            const title = document.getElementById('modal-title');
+            const msg = document.getElementById('modal-message');
+
+            title.innerText = won ? "VITÓRIA! 🏆" : "DERROTA! ❌";
+            title.className = won ? "win" : "lose";
+
+            if (won) {
+                const prize = betAmount * 2;
+                balance += prize;
+                soundWin.currentTime = 0;
+                soundWin.play().catch(() => { });
+                msg.innerText = `O ${horseName} venceu! Você faturou +$${prize.toFixed(2)}.`;
+            } else {
+                msg.innerText = `O ${horseName} chegou primeiro. Tente novamente!`;
+            }
+
+            document.getElementById('balance').innerText = `$${balance.toFixed(2)}`;
+            modal.style.display = 'flex';
         } else {
-            raceAnimationId = requestAnimationFrame(frame);
+            raceAnimationId = requestAnimationFrame(move);
         }
     }
-    raceAnimationId = requestAnimationFrame(frame);
-}
+    raceAnimationId = requestAnimationFrame(move);
+});
 
-function renderResult(winner) {
-    const won = selectedHorse === winner;
-    const name = document.querySelector(`.horse-item[data-horse="${winner}"] .name`).innerText;
+// RESET
+function closeModal() {
+    document.getElementById('result-overlay').style.display = 'none';
 
-    console.log("Resultado:", won ? "Ganhou" : "Perdeu", "Vencedor:", name);
-
-    const title = document.getElementById('modal-title');
-    title.innerText = won ? "VITÓRIA! 🏆" : "DERROTA! ❌";
-    title.className = won ? "win" : "lose";
-
-    if (won) {
-        const prize = betAmount * 2;
-        balance += prize;
-        soundWin.currentTime = 0;
-        soundWin.play().catch(e => console.log(e));
-        document.getElementById('modal-message').innerText = `O ${name} foi o campeão! Você faturou +$${prize.toFixed(2)}.`;
-    } else {
-        document.getElementById('modal-message').innerText = `O ${name} cruzou primeiro. Não foi dessa vez!`;
+    // Reset positions
+    for (let i = 1; i <= 5; i++) {
+        document.getElementById(`sprite-${i}`).style.left = '20px';
     }
 
-    updateUI();
-    overlay.style.display = 'flex';
-}
+    // Reset UI
+    document.getElementById('place-bet').style.display = 'block';
+    document.getElementById('start-race').style.display = 'none';
+    document.getElementById('start-race').disabled = false;
+    document.getElementById('bet-amount').disabled = false;
+    document.getElementById('bet-amount').value = '';
 
-// RESET COMPLETO PARA JOGAR DE NOVO
-function resetGame() {
-    console.log("Resetando jogo...");
-    overlay.style.display = 'none';
-    cancelAnimationFrame(raceAnimationId);
-
-    // Reset de Posições
-    sprites.forEach(s => {
-        s.style.left = '20px';
-        s.classList.remove('running');
-    });
-
-    // Reset de Botões
-    placeBetBtn.style.display = 'block';
-    startRaceBtn.style.display = 'none';
-    startRaceBtn.disabled = false;
-    placeBetBtn.disabled = true;
-
-    // Reset de Input e Seleção
-    betInput.disabled = false;
-    betInput.value = '';
     selectedHorse = null;
-    horseItems.forEach(i => i.classList.remove('selected'));
+    document.querySelectorAll('.horse-item').forEach(i => i.classList.remove('selected'));
 
     isRacing = false;
     updateUI();
 }
 
-// Tornar global para o botão 'onclick'
-window.closeModal = resetGame;
+// Global for onclick
+window.closeModal = closeModal;
 
-startRaceBtn.addEventListener('click', startRace);
 updateUI();

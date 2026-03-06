@@ -6,7 +6,6 @@
     --acc: #00f2ff;
     --mag: #ff00ea;
     --win: #39ff14;
-    --border: rgba(255, 255, 255, 0.08);
 }
 
 * {
@@ -17,7 +16,7 @@
 }
 
 body {
-    background-color: var(--bg);
+    background: var(--bg);
     color: #fff;
     height: 100vh;
     width: 100vw;
@@ -25,71 +24,50 @@ body {
     overflow: hidden;
 }
 
-/* Sidebar Fixa */
 aside {
     width: 320px;
-    min-width: 320px;
-    height: 100vh;
     background: var(--side);
-    border-right: 2px solid var(--border);
+    border-right: 2px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
-    overflow-y: auto;
+    height: 100vh;
     z-index: 100;
 }
 
 .balance-card {
-    background: linear-gradient(135deg, rgba(0, 242, 255, 0.1), rgba(255, 0, 234, 0.05));
+    background: rgba(0, 242, 255, 0.05);
     border: 1px solid var(--acc);
     border-radius: 12px;
     padding: 1rem;
     text-align: center;
-    margin-bottom: 2rem;
-}
-
-.balance-card h4 {
-    font-size: 0.7rem;
-    color: var(--acc);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.balance-card span {
-    font-size: 2rem;
-    font-weight: 900;
+    margin-bottom: 1.5rem;
 }
 
 .section-label {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #666;
     text-transform: uppercase;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     display: block;
 }
 
-/* Lista de Cavalos */
 .horse-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 2rem;
+    gap: 6px;
+    margin-bottom: 1rem;
 }
 
 .horse-item {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid transparent;
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 8px;
+    padding: 8px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
     cursor: pointer;
-    transition: 0.2s;
-}
-
-.horse-item:hover {
-    background: rgba(255, 255, 255, 0.07);
 }
 
 .horse-item.selected {
@@ -98,52 +76,36 @@ aside {
 }
 
 .horse-item img {
-    width: 40px !important;
-    height: 40px !important;
+    width: 35px !important;
+    height: 35px !important;
     object-fit: contain !important;
 }
 
-.horse-item .name {
-    font-weight: 600;
-    font-size: 0.9rem;
-    flex: 1;
-}
-
-.horse-item .odds {
-    font-size: 0.7rem;
-    color: var(--win);
-    font-weight: 800;
-}
-
-/* Aposta e Botões */
 .bet-group {
+    margin-top: auto;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: auto;
+    gap: 8px;
 }
 
 input {
-    background: #000;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1rem;
-    color: #fff;
-    font-size: 1.1rem;
     width: 100%;
+    padding: 12px;
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
     outline: none;
 }
 
-.main-btn {
+.btn {
     width: 100%;
-    padding: 1.2rem;
+    padding: 14px;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-weight: 900;
     text-transform: uppercase;
     cursor: pointer;
-    transition: 0.3s;
-    font-size: 1rem;
 }
 
 .bet-btn {
@@ -156,144 +118,94 @@ input {
     color: #fff;
 }
 
-.main-btn:disabled {
+.btn:disabled {
     opacity: 0.2;
     cursor: not-allowed;
 }
 
-/* Área da Corrida - GARANTINDO ALINHAMENTO */
+/* ÁREA DA CORRIDA */
 main {
     flex: 1;
-    height: 100vh;
-    padding: 3rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-}
-
-main h1 {
-    text-align: center;
-    font-size: 2.5rem;
-    font-weight: 900;
-    margin-bottom: 2rem;
 }
 
 .track-area {
     flex: 1;
     background: #080a0f;
-    border: 1px solid var(--border);
-    border-radius: 20px;
+    border: 1px solid #222;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
-    /* FORÇA UM EMBAIXO DO OUTRO */
     position: relative;
     overflow: hidden;
 }
 
 .lane {
     flex: 1;
-    /* DIVIDE O ESPAÇO IGUALMENTE */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid #1a1a1a;
     display: flex;
     align-items: center;
-    /* ALINHA O CAVALO NO CENTRO DA RAIA */
     position: relative;
-    padding-left: 20px;
-}
-
-.lane:last-child {
-    border-bottom: none;
 }
 
 .sprite {
-    width: 70px !important;
-    height: 50px !important;
-    object-fit: contain !important;
+    width: 60px !important;
+    height: 45px !important;
     position: absolute;
     left: 20px;
-    transition: left 0.1s linear;
+    object-fit: contain !important;
+    z-index: 10;
 }
 
 .finish-line {
     position: absolute;
-    right: 100px;
+    right: 80px;
     top: 0;
     bottom: 0;
-    width: 40px;
+    width: 30px;
     background: repeating-linear-gradient(45deg, #fff, #fff 10px, #000 10px, #000 20px);
-    opacity: 0.2;
-    border-left: 2px solid var(--acc);
+    opacity: 0.1;
+    border-left: 1px solid var(--acc);
 }
 
-/* Modal */
 .overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0, 0, 0, 0.9);
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
 }
 
 .modal {
     background: var(--side);
-    padding: 4rem;
-    border-radius: 24px;
-    border: 2px solid var(--acc);
+    padding: 3rem;
+    border-radius: 20px;
+    border: 1px solid var(--acc);
     text-align: center;
-    max-width: 500px;
 }
 
-.modal h2 {
-    font-size: 4rem;
-    font-weight: 900;
-    margin-bottom: 1rem;
-}
-
-.win {
-    color: var(--win);
-}
-
-.lose {
-    color: var(--mag);
-}
-
-/* Filtros */
 .h-1 {
     filter: brightness(1.1);
 }
 
 .h-2 {
-    filter: hue-rotate(290deg);
+    filter: hue-rotate(280deg);
 }
 
 .h-3 {
-    filter: hue-rotate(120deg);
+    filter: hue-rotate(110deg);
 }
 
 .h-4 {
-    filter: hue-rotate(200deg);
+    filter: hue-rotate(190deg);
 }
 
 .h-5 {
     filter: grayscale(1);
-}
-
-@keyframes jump {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-5px);
-    }
-}
-
-.running {
-    animation: jump 0.2s infinite;
 }

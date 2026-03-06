@@ -11,23 +11,23 @@
 <body>
     <aside>
         <div class="balance-card">
-            <h4>Seu Saldo</h4>
+            <h4>SEU SALDO</h4>
             <span id="balance">$100.00</span>
         </div>
 
         <span class="section-label">1. Escolha o Corredor</span>
-        <div class="horse-list" id="horse-selector">
+        <div class="horse-list">
             <div class="horse-item" data-horse="1">
                 <img src="horse_sprite.png" class="h-1">
                 <div class="info"><span class="name">Pé de Pano</span><span class="odds">2.0x</span></div>
             </div>
             <div class="horse-item" data-horse="2">
                 <img src="horse_sprite.png" class="h-2">
-                <div class="info"><span class="name">Relâmpago Ma-Horse</span><span class="odds">2.0x</span></div>
+                <div class="info"><span class="name">Ma-Horse</span><span class="odds">2.0x</span></div>
             </div>
             <div class="horse-item" data-horse="3">
                 <img src="horse_sprite.png" class="h-3">
-                <div class="info"><span class="name">U-Horse-ain Bolt</span><span class="odds">2.0x</span></div>
+                <div class="info"><span class="name">U-Horse-ain</span><span class="odds">2.0x</span></div>
             </div>
             <div class="horse-item" data-horse="4">
                 <img src="horse_sprite.png" class="h-4">
@@ -40,11 +40,10 @@
         </div>
 
         <div class="bet-group">
-            <span class="section-label">2. Defina o Valor</span>
-            <input type="number" id="bet-amount" placeholder="Quanto apostar?">
-
-            <button id="place-bet" class="main-btn bet-btn" disabled>Confirmar Aposta</button>
-            <button id="start-race" class="main-btn start-btn" style="display: none;">Iniciar Corrida!</button>
+            <span class="section-label">2. Valor da Aposta</span>
+            <input type="number" id="bet-amount" placeholder="0.00">
+            <button id="place-bet" class="btn bet-btn" disabled>Confirmar Aposta</button>
+            <button id="start-race" class="btn start-btn" style="display: none;">Iniciar Corrida!</button>
         </div>
     </aside>
 
@@ -52,11 +51,11 @@
         <h1>CORRIDA DE CAVALOS</h1>
         <div class="track-area">
             <div class="finish-line"></div>
-            <div class="lane"><img src="horse_sprite.png" class="sprite h-1" id="sprite-1"></div>
-            <div class="lane"><img src="horse_sprite.png" class="sprite h-2" id="sprite-2"></div>
-            <div class="lane"><img src="horse_sprite.png" class="sprite h-3" id="sprite-3"></div>
-            <div class="lane"><img src="horse_sprite.png" class="sprite h-4" id="sprite-4"></div>
-            <div class="lane"><img src="horse_sprite.png" class="sprite h-5" id="sprite-5"></div>
+            <div class="lane"><img src="horse_sprite.png" id="sprite-1" class="sprite h-1"></div>
+            <div class="lane"><img src="horse_sprite.png" id="sprite-2" class="sprite h-2"></div>
+            <div class="lane"><img src="horse_sprite.png" id="sprite-3" class="sprite h-3"></div>
+            <div class="lane"><img src="horse_sprite.png" id="sprite-4" class="sprite h-4"></div>
+            <div class="lane"><img src="horse_sprite.png" id="sprite-5" class="sprite h-5"></div>
         </div>
     </main>
 
@@ -66,9 +65,9 @@
 
     <div class="overlay" id="result-overlay">
         <div class="modal">
-            <h2 id="modal-title">VITÓRIA!</h2>
+            <h2 id="modal-title">RESULTADO</h2>
             <p id="modal-message"></p>
-            <button class="main-btn bet-btn" onclick="closeModal()">Nova Corrida</button>
+            <button class="btn bet-btn" onclick="closeModal()">Nova Rodada</button>
         </div>
     </div>
 
