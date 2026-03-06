@@ -134,9 +134,7 @@ main {
 .horse-card img {
     width: 60px;
     height: 60px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    object-fit: contain;
 }
 
 .horse-name {
@@ -226,12 +224,6 @@ input[type="number"]:focus {
     left: 0;
     transition: transform 0.1s linear;
     z-index: 2;
-    border-radius: 50%;
-    /* Makes the photo circular */
-    border: 3px solid var(--accent-color);
-    object-fit: cover;
-    /* Ensures the face fits well */
-    background: #1a1c24;
 }
 
 .finish-line {
@@ -273,7 +265,6 @@ input[type="number"]:focus {
 
 .horse-3 {
     filter: var(--bruno-esmeralda);
-    animation: pulse-green 2s infinite !important;
 }
 
 .horse-4 {
