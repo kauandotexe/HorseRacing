@@ -18,11 +18,15 @@ const soundWin = document.getElementById('sound-win');
 
 function updateUI() {
     balanceDisplay.innerText = `$${balance.toFixed(2)}`;
+    checkBet(); // Re-valida o botão sempre que o saldo ou estado muda
 }
 
+// Seleção de Cavalo
 horseItems.forEach(item => {
     item.addEventListener('click', () => {
         if (isRacing || startRaceBtn.style.display === 'block') return;
+
+        console.log("Cavalo selecionado:", item.dataset.horse);
         horseItems.forEach(i => i.classList.remove('selected'));
         item.classList.add('selected');
         selectedHorse = parseInt(item.dataset.horse);
@@ -33,40 +37,48 @@ horseItems.forEach(item => {
 betInput.addEventListener('input', checkBet);
 
 function checkBet() {
-    betAmount = parseFloat(betInput.value);
-    if (isNaN(betAmount)) betAmount = 0;
+    const amount = parseFloat(betInput.value);
+    betAmount = isNaN(amount) ? 0 : amount;
 
-    // Validate if horse is selected and bet is within balance
-    const isValid = selectedHorse !== null && betAmount > 0 && betAmount <= balance;
+    const isValid = selectedHorse !== null &&
+        betAmount > 0 &&
+        betAmount <= balance &&
+        !isRacing &&
+        startRaceBtn.style.display !== 'block';
+
     placeBetBtn.disabled = !isValid;
 }
 
+// Botar a Aposta
 placeBetBtn.addEventListener('click', () => {
     if (placeBetBtn.disabled) return;
 
+    console.log("Aposta confirmada:", betAmount);
     soundCash.currentTime = 0;
-    soundCash.play();
+    soundCash.play().catch(e => console.log(e));
 
     balance -= betAmount;
     updateUI();
 
-    // Swap buttons
     placeBetBtn.style.display = 'none';
     startRaceBtn.style.display = 'block';
     startRaceBtn.disabled = false;
     betInput.disabled = true;
 });
 
+// Iniciar Corrida
 function startRace() {
     if (isRacing) return;
 
+    console.log("Corrida iniciada!");
     isRacing = true;
     startRaceBtn.disabled = true;
-    soundRace.currentTime = 0;
-    soundRace.play();
 
-    const trackWidth = document.querySelector('.track-container').clientWidth;
-    const finishX = trackWidth - 120; // Correct alignment for finish
+    soundRace.currentTime = 0;
+    soundRace.play().catch(e => console.log(e));
+
+    const trackWidth = document.querySelector('.track-area').clientWidth;
+    const finishX = trackWidth - 140; // Ajuste para a linha de chegada
     const pos = [20, 20, 20, 20, 20];
 
     sprites.forEach(s => {
@@ -77,8 +89,8 @@ function startRace() {
     function frame() {
         let winner = null;
         for (let i = 0; i < 5; i++) {
-            // Speed calculation
-            const speed = (Math.random() * 4) + (Math.random() > 0.98 ? 18 : 0);
+            const burst = Math.random() > 0.985 ? 18 : 0;
+            const speed = (Math.random() * 4) + burst;
             pos[i] += speed;
             sprites[i].style.left = pos[i] + 'px';
 
@@ -102,8 +114,9 @@ function startRace() {
 
 function renderResult(winner) {
     const won = selectedHorse === winner;
-    const item = document.querySelector(`.horse-item[data-horse="${winner}"]`);
-    const name = item ? item.querySelector('.name').innerText : "Vencedor";
+    const name = document.querySelector(`.horse-item[data-horse="${winner}"] .name`).innerText;
+
+    console.log("Resultado:", won ? "Ganhou" : "Perdeu", "Vencedor:", name);
 
     const title = document.getElementById('modal-title');
     title.innerText = won ? "VITÓRIA! 🏆" : "DERROTA! ❌";
@@ -113,32 +126,46 @@ function renderResult(winner) {
         const prize = betAmount * 2;
         balance += prize;
         soundWin.currentTime = 0;
-        soundWin.play();
-        document.getElementById('modal-message').innerText = `O ${name} cruzou primeiro! Você faturou +$${prize.toFixed(2)}.`;
+        soundWin.play().catch(e => console.log(e));
+        document.getElementById('modal-message').innerText = `O ${name} foi o campeão! Você faturou +$${prize.toFixed(2)}.`;
     } else {
-        document.getElementById('modal-message').innerText = `O ${name} foi o campeão. Dessa vez não deu!`;
+        document.getElementById('modal-message').innerText = `O ${name} cruzou primeiro. Não foi dessa vez!`;
     }
 
     updateUI();
     overlay.style.display = 'flex';
 }
 
-function closeModal() {
+// RESET COMPLETO PARA JOGAR DE NOVO
+function resetGame() {
+    console.log("Resetando jogo...");
     overlay.style.display = 'none';
-    sprites.forEach(s => s.style.left = '20px');
+    cancelAnimationFrame(raceAnimationId);
+
+    // Reset de Posições
+    sprites.forEach(s => {
+        s.style.left = '20px';
+        s.classList.remove('running');
+    });
+
+    // Reset de Botões
     placeBetBtn.style.display = 'block';
     startRaceBtn.style.display = 'none';
     startRaceBtn.disabled = false;
+    placeBetBtn.disabled = true;
+
+    // Reset de Input e Seleção
     betInput.disabled = false;
     betInput.value = '';
     selectedHorse = null;
     horseItems.forEach(i => i.classList.remove('selected'));
-    checkBet();
+
+    isRacing = false;
+    updateUI();
 }
 
+// Tornar global para o botão 'onclick'
+window.closeModal = resetGame;
+
 startRaceBtn.addEventListener('click', startRace);
-
-// Export to window for global access if needed
-window.closeModal = closeModal;
-
 updateUI();

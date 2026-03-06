@@ -11,11 +11,11 @@
 <body>
     <aside>
         <div class="balance-card">
-            <h4>SALDO</h4>
+            <h4>Seu Saldo</h4>
             <span id="balance">$100.00</span>
         </div>
 
-        <span class="section-title">1. Escolha o Corredor</span>
+        <span class="section-label">1. Escolha o Corredor</span>
         <div class="horse-list" id="horse-selector">
             <div class="horse-item" data-horse="1">
                 <img src="horse_sprite.png" class="h-1">
@@ -23,11 +23,11 @@
             </div>
             <div class="horse-item" data-horse="2">
                 <img src="horse_sprite.png" class="h-2">
-                <div class="info"><span class="name">Ma-Horse</span><span class="odds">2.0x</span></div>
+                <div class="info"><span class="name">Relâmpago Ma-Horse</span><span class="odds">2.0x</span></div>
             </div>
             <div class="horse-item" data-horse="3">
                 <img src="horse_sprite.png" class="h-3">
-                <div class="info"><span class="name">U-Horse-ain</span><span class="odds">2.0x</span></div>
+                <div class="info"><span class="name">U-Horse-ain Bolt</span><span class="odds">2.0x</span></div>
             </div>
             <div class="horse-item" data-horse="4">
                 <img src="horse_sprite.png" class="h-4">
@@ -39,16 +39,18 @@
             </div>
         </div>
 
-        <span class="section-title">2. Aposta ($)</span>
-        <input type="number" id="bet-amount" placeholder="Quanto?">
+        <div class="bet-group">
+            <span class="section-label">2. Defina o Valor</span>
+            <input type="number" id="bet-amount" placeholder="Quanto apostar?">
 
-        <button id="place-bet" class="btn bet-btn" disabled>Confirmar Aposta</button>
-        <button id="start-race" class="btn start-btn" style="display: none;">Dar a Largada!</button>
+            <button id="place-bet" class="main-btn bet-btn" disabled>Confirmar Aposta</button>
+            <button id="start-race" class="main-btn start-btn" style="display: none;">Iniciar Corrida!</button>
+        </div>
     </aside>
 
     <main>
         <h1>CORRIDA DE CAVALOS</h1>
-        <div class="track-container">
+        <div class="track-area">
             <div class="finish-line"></div>
             <div class="lane"><img src="horse_sprite.png" class="sprite h-1" id="sprite-1"></div>
             <div class="lane"><img src="horse_sprite.png" class="sprite h-2" id="sprite-2"></div>
@@ -62,11 +64,11 @@
     <audio id="sound-race" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" loop></audio>
     <audio id="sound-win" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
-    <div class="modal-overlay" id="result-overlay">
-        <div class="modal-content">
+    <div class="overlay" id="result-overlay">
+        <div class="modal">
             <h2 id="modal-title">VITÓRIA!</h2>
             <p id="modal-message"></p>
-            <button class="btn bet-btn" onclick="closeModal()">Nova Rodada</button>
+            <button class="main-btn bet-btn" onclick="closeModal()">Nova Corrida</button>
         </div>
     </div>
 
